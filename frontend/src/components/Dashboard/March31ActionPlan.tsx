@@ -21,12 +21,14 @@ interface March31ActionPlanProps {
   formData: TaxFormData;
   taxResult: TaxResult | null;
   onUpdateField: (field: keyof TaxFormData, value: number) => void;
+  hideHeader?: boolean;
 }
 
 export const March31ActionPlan: React.FC<March31ActionPlanProps> = ({
   formData,
   taxResult,
-  onUpdateField
+  onUpdateField,
+  hideHeader = false
 }) => {
   const [completedTasks, setCompletedTasks] = useState<Record<string, boolean>>(() => {
     try {
@@ -121,6 +123,104 @@ export const March31ActionPlan: React.FC<March31ActionPlanProps> = ({
   const completedCount = tasks.filter((t) => completedTasks[t.id]).length;
   const progressPercent = Math.round((completedCount / totalTasks) * 100);
 
+  const taskList = (
+    <div className="space-y-3 pt-2">
+      {/* Mini Progress bar if hideHeader */}
+      {hideHeader && (
+        <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#0E1528] border border-[#E7E2D7] dark:border-[#26304A] flex items-center justify-between gap-3 mb-2">
+          <div>
+            <div className="text-xs font-bold text-slate-900 dark:text-white">
+              {completedCount} of {totalTasks} Completed
+            </div>
+            <div className="text-[10px] text-slate-500 dark:text-[#A5B0C8]">
+              {progressPercent}% Tax Readiness
+            </div>
+          </div>
+          <div className="w-24 bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
+            <div 
+              className="bg-gradient-to-r from-[#8B5CF6] to-[#2DD4BF] h-full transition-all duration-500 rounded-full"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+        </div>
+      )}
+
+      {tasks.map((task) => {
+        const isDone = !!completedTasks[task.id];
+        return (
+          <div
+            key={task.id}
+            className={`p-3.5 rounded-xl border transition-all duration-200 ${
+              isDone
+                ? 'bg-slate-50/60 dark:bg-slate-900/40 border-[#E7E2D7] dark:border-[#26304A] opacity-75'
+                : 'bg-white dark:bg-[#131A2E] border-[#E7E2D7] dark:border-[#26304A] shadow-xs'
+            }`}
+          >
+            <div className="flex items-start gap-3">
+              <button
+                type="button"
+                onClick={() => toggleTask(task.id)}
+                className={`mt-0.5 p-1 rounded-lg transition-all ${
+                  isDone
+                    ? 'bg-[#2DD4BF] text-slate-900'
+                    : 'text-slate-400 hover:text-slate-600 dark:hover:text-white'
+                }`}
+                aria-label={isDone ? 'Mark as incomplete' : 'Mark as complete'}
+              >
+                {isDone ? <CheckCircle2 className="h-4 w-4" /> : <Circle className="h-4 w-4" />}
+              </button>
+
+              <div className="flex-1 space-y-1">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <span
+                    className={`text-xs font-bold ${
+                      isDone
+                        ? 'line-through text-slate-400 dark:text-slate-500'
+                        : 'text-slate-900 dark:text-white'
+                    }`}
+                  >
+                    {task.title}
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[9px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-[#0B1020] text-slate-500">
+                      {task.category}
+                    </span>
+                    {task.isUrgent && !isDone && (
+                      <span className="text-[9px] uppercase tracking-wider font-black px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
+                        Urgent
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <p className="text-[11px] text-slate-500 dark:text-[#A5B0C8] leading-relaxed">
+                  {task.description}
+                </p>
+
+                {task.actionLabel && !isDone && (
+                  <div className="pt-1.5">
+                    <button
+                      type="button"
+                      onClick={task.onAction}
+                      className="px-2.5 py-1 rounded-lg bg-[#8B5CF6]/10 text-[#7C3AED] dark:text-[#8B5CF6] hover:bg-[#8B5CF6]/20 text-[10px] font-bold inline-flex items-center gap-1 transition-all"
+                    >
+                      <span>{task.actionLabel}</span>
+                      <ArrowRight className="h-2.5 w-2.5" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+
+  if (hideHeader) {
+    return taskList;
+  }
+
   return (
     <div className="bg-white dark:bg-[#131A2E] rounded-2xl border border-[#E7E2D7] dark:border-[#26304A] p-5 sm:p-6 shadow-sm transition-all duration-300">
       {/* Top Banner Header */}
@@ -177,67 +277,10 @@ export const March31ActionPlan: React.FC<March31ActionPlanProps> = ({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="space-y-3 pt-4"
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
           >
-            {tasks.map((task) => {
-              const isDone = !!completedTasks[task.id];
-              return (
-                <div
-                  key={task.id}
-                  className={`p-3.5 sm:p-4 rounded-xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                    isDone
-                      ? 'bg-emerald-500/5 border-emerald-500/20 opacity-75'
-                      : task.isUrgent
-                      ? 'bg-slate-50/70 dark:bg-[#0B1020]/60 border-[#E7E2D7] dark:border-[#26304A] hover:border-[#8B5CF6]/40'
-                      : 'bg-white dark:bg-[#131A2E] border-[#E7E2D7] dark:border-[#26304A]'
-                  }`}
-                >
-                  <div className="flex items-start gap-3 min-w-0">
-                    <button
-                      onClick={() => toggleTask(task.id)}
-                      className={`mt-0.5 shrink-0 transition-transform active:scale-90 ${
-                        isDone
-                          ? 'text-emerald-500'
-                          : 'text-slate-400 hover:text-[#8B5CF6]'
-                      }`}
-                      aria-label="Toggle task status"
-                    >
-                      {isDone ? (
-                        <CheckCircle2 className="h-5 w-5 fill-emerald-500/20" />
-                      ) : (
-                        <Circle className="h-5 w-5" />
-                      )}
-                    </button>
-                    <div>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className={`text-xs font-bold ${isDone ? 'line-through text-slate-400' : 'text-slate-900 dark:text-white'}`}>
-                          {task.title}
-                        </span>
-                        <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-slate-200/60 dark:bg-slate-800 text-slate-600 dark:text-[#A5B0C8]">
-                          {task.category}
-                        </span>
-                      </div>
-                      <p className={`text-[11px] mt-1 leading-relaxed ${isDone ? 'text-slate-400' : 'text-slate-600 dark:text-[#A5B0C8]'}`}>
-                        {task.description}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Optional Action Button */}
-                  {task.actionLabel && !isDone && (
-                    <div className="shrink-0 sm:self-center pl-8 sm:pl-0">
-                      <button
-                        onClick={task.onAction}
-                        className="px-3 py-1.5 rounded-lg bg-[#8B5CF6]/15 hover:bg-[#8B5CF6]/25 border border-[#8B5CF6]/30 text-[#7C3AED] dark:text-[#8B5CF6] text-xs font-bold transition-all shadow-xs active:scale-95 flex items-center gap-1.5"
-                      >
-                        <Sparkles className="h-3 w-3" />
-                        <span>{task.actionLabel}</span>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+            {taskList}
           </motion.div>
         )}
       </AnimatePresence>

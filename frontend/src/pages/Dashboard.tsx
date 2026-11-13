@@ -91,12 +91,10 @@ export const Dashboard: React.FC = () => {
   const [showFloatingHUD, setShowFloatingHUD] = useState(false);
   const [isExportingPDF, setIsExportingPDF] = useState(false);
   const [isScannerOpen, setIsScannerOpen] = useState(false);
-  const [isInsightsDrawerOpen, setIsInsightsDrawerOpen] = useState(false);
-  const [insightsTab, setInsightsTab] = useState<'advisor' | 'march31'>('advisor');
+  const [activeDrawer, setActiveDrawer] = useState<'advisor' | 'march31' | null>(null);
 
-  const openInsights = (tab: 'advisor' | 'march31') => {
-    setInsightsTab(tab);
-    setIsInsightsDrawerOpen(true);
+  const openDrawer = (drawer: 'advisor' | 'march31') => {
+    setActiveDrawer(drawer);
   };
 
   const scenarioDropdownRef = useRef<HTMLDivElement>(null);
@@ -454,14 +452,14 @@ export const Dashboard: React.FC = () => {
 
           <div className="flex items-center gap-2.5 shrink-0">
             <button
-              onClick={() => openInsights('advisor')}
+              onClick={() => openDrawer('advisor')}
               className="px-4 py-2.5 rounded-xl bg-white dark:bg-[#131A2E] hover:border-[#8B5CF6] border border-[#E7E2D7] dark:border-[#26304A] text-xs font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 transition-all shadow-xs active:scale-95 group"
             >
               <Lightbulb className="h-4 w-4 text-[#7C3AED] dark:text-[#8B5CF6] group-hover:scale-110 transition-transform" />
               <span>Tax Advisor</span>
             </button>
             <button
-              onClick={() => openInsights('march31')}
+              onClick={() => openDrawer('march31')}
               className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-xs font-bold text-white dark:text-slate-900 flex items-center gap-2 transition-all shadow-sm active:scale-95 group"
             >
               <CalendarClock className="h-4 w-4 text-[#2DD4BF] group-hover:scale-110 transition-transform" />
@@ -490,7 +488,7 @@ export const Dashboard: React.FC = () => {
         <motion.button
           whileHover={{ x: -6 }}
           whileTap={{ scale: 0.96 }}
-          onClick={() => openInsights('advisor')}
+          onClick={() => openDrawer('advisor')}
           className="group flex items-center gap-2.5 pl-3.5 pr-2.5 py-2.5 rounded-l-2xl bg-white/95 dark:bg-[#131A2E]/95 backdrop-blur-md border-y border-l border-[#E7E2D7] dark:border-[#26304A] shadow-xl shadow-slate-900/10 hover:shadow-[#8B5CF6]/20 hover:border-[#8B5CF6]/40 transition-all text-slate-800 dark:text-slate-100 cursor-pointer"
           aria-label="Open Strategic Tax Advisor"
         >
@@ -507,7 +505,7 @@ export const Dashboard: React.FC = () => {
         <motion.button
           whileHover={{ x: -6 }}
           whileTap={{ scale: 0.96 }}
-          onClick={() => openInsights('march31')}
+          onClick={() => openDrawer('march31')}
           className="group flex items-center gap-2.5 pl-3.5 pr-2.5 py-2.5 rounded-l-2xl bg-white/95 dark:bg-[#131A2E]/95 backdrop-blur-md border-y border-l border-[#E7E2D7] dark:border-[#26304A] shadow-xl shadow-slate-900/10 hover:shadow-[#2DD4BF]/20 hover:border-[#2DD4BF]/40 transition-all text-slate-800 dark:text-slate-100 cursor-pointer"
           aria-label="Open March 31 Action Plan"
         >
@@ -523,12 +521,11 @@ export const Dashboard: React.FC = () => {
         </motion.button>
       </aside>
 
-      {/* Slide-Over Tax Insights & Planning Drawer */}
+      {/* Slide-Over Dedicated Tax Insights & Planning Drawer */}
       <TaxInsightsDrawer
-        isOpen={isInsightsDrawerOpen}
-        onClose={() => setIsInsightsDrawerOpen(false)}
-        activeTab={insightsTab}
-        onTabChange={(tab) => setInsightsTab(tab)}
+        isOpen={activeDrawer !== null}
+        onClose={() => setActiveDrawer(null)}
+        activeDrawer={activeDrawer}
         formData={formData}
         taxResult={taxResult}
         onUpdateField={(field, val) => handleFormChange(field, val)}
