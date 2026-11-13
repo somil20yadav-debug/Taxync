@@ -434,41 +434,113 @@ export const Dashboard: React.FC = () => {
           <TaxAnalytics taxResult={taxResult} formData={formData} />
         </motion.section>
 
-        {/* Step 4: Strategic Optimization & Deadlines (Compact Inline Launch Hub) */}
-        <section className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#8B5CF6]/10 via-[#2DD4BF]/10 to-transparent border border-[#E7E2D7] dark:border-[#26304A] flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs transition-colors">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-white dark:bg-[#131A2E] border border-[#E7E2D7] dark:border-[#26304A] text-[#7C3AED] dark:text-[#8B5CF6] shadow-xs">
-              <Sparkles className="h-5 w-5" />
-            </div>
+        {/* Step 4: Strategic Optimization & Deadlines (Two Eye-Catching Side-by-Side Hero Cards) */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Card 1: Strategic Tax Advisor */}
+          <motion.div
+            whileHover={{ y: -3 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => openDrawer('advisor')}
+            className="p-5 sm:p-6 rounded-2xl bg-white dark:bg-[#131A2E] border border-[#E7E2D7] dark:border-[#26304A] hover:border-[#8B5CF6]/50 shadow-sm hover:shadow-lg hover:shadow-[#8B5CF6]/10 flex flex-col justify-between gap-4 transition-all cursor-pointer group"
+          >
             <div>
-              <h3 className="text-xs font-black uppercase text-slate-900 dark:text-white tracking-wider flex items-center gap-2">
-                <span>Personalized Planning & Statutory Deadlines</span>
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-[#A5B0C8] mt-0.5">
-                Explore calculated Corporate NPS restructuring and your March 31 statutory deduction checklist.
-              </p>
-            </div>
-          </div>
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-xl bg-[#8B5CF6]/15 text-[#7C3AED] dark:text-[#8B5CF6] group-hover:bg-[#8B5CF6] group-hover:text-white transition-colors">
+                    <Lightbulb className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-black text-slate-900 dark:text-white">
+                      Strategic Tax Advisor
+                    </h3>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      AI Optimization Roadmap
+                    </span>
+                  </div>
+                </div>
+                <span className="w-2 h-2 rounded-full bg-[#8B5CF6] animate-pulse" />
+              </div>
 
-          <div className="flex items-center gap-2.5 shrink-0">
-            <button
-              onClick={() => openDrawer('advisor')}
-              className="px-4 py-2.5 rounded-xl bg-white dark:bg-[#131A2E] hover:border-[#8B5CF6] border border-[#E7E2D7] dark:border-[#26304A] text-xs font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 transition-all shadow-xs active:scale-95 group"
-            >
-              <Lightbulb className="h-4 w-4 text-[#7C3AED] dark:text-[#8B5CF6] group-hover:scale-110 transition-transform" />
-              <span>Tax Advisor</span>
-            </button>
-            <button
-              onClick={() => openDrawer('march31')}
-              className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-xs font-bold text-white dark:text-slate-900 flex items-center gap-2 transition-all shadow-sm active:scale-95 group"
-            >
-              <CalendarClock className="h-4 w-4 text-[#2DD4BF] group-hover:scale-110 transition-transform" />
-              <span>March 31 Plan</span>
-              <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-rose-500/20 text-rose-300 dark:text-rose-600 border border-rose-500/30">
-                139d
-              </span>
-            </button>
-          </div>
+              {/* Dynamic Action Preview Bullets */}
+              <div className="space-y-2 text-xs">
+                <div className="flex items-start gap-2 text-slate-600 dark:text-[#A5B0C8] leading-relaxed">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] mt-1.5 shrink-0" />
+                  <span>
+                    {taxResult && formData.income <= 1200000 
+                      ? '100% tax rebate under Section 87A (New Regime) pays ₹0 tax.'
+                      : `Corporate NPS (Sec 80CCD(2)): Restructure up to 10% basic salary into Employer NPS to legally shield extra tax.`}
+                  </span>
+                </div>
+                <div className="flex items-start gap-2 text-slate-600 dark:text-[#A5B0C8] leading-relaxed">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] mt-1.5 shrink-0" />
+                  <span>
+                    {taxResult && taxResult.winner === 'New Regime'
+                      ? `New Regime saves ₹${(taxResult.savings || 0).toLocaleString('en-IN')}. Old Regime requires extra deductions to break even.`
+                      : `Deduction claims exceed the break-even gap, locking in an Old Regime tax advantage.`}
+                  </span>
+                </div>
+                <div className="flex items-start gap-2 text-slate-600 dark:text-[#A5B0C8] leading-relaxed">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] mt-1.5 shrink-0" />
+                  <span>Reinvest monthly tax surplus into index equity to build long-term wealth without lock-in.</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-[#E7E2D7] dark:border-[#26304A] flex items-center justify-between text-xs font-bold text-[#7C3AED] dark:text-[#8B5CF6]">
+              <span>Open Full Strategy</span>
+              <ArrowUpRight className="h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </div>
+          </motion.div>
+
+          {/* Card 2: March 31 Action Plan */}
+          <motion.div
+            whileHover={{ y: -3 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => openDrawer('march31')}
+            className="p-5 sm:p-6 rounded-2xl bg-white dark:bg-[#131A2E] border border-[#E7E2D7] dark:border-[#26304A] hover:border-[#2DD4BF]/50 shadow-sm hover:shadow-lg hover:shadow-[#2DD4BF]/10 flex flex-col justify-between gap-4 transition-all cursor-pointer group"
+          >
+            <div>
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-xl bg-[#2DD4BF]/15 text-[#0D9488] dark:text-[#2DD4BF] group-hover:bg-[#2DD4BF] group-hover:text-slate-900 transition-colors">
+                    <CalendarClock className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-black text-slate-900 dark:text-white">
+                      March 31 Action Plan
+                    </h3>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      Statutory Deadlines
+                    </span>
+                  </div>
+                </div>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20">
+                  139 Days Left
+                </span>
+              </div>
+
+              {/* Statutory Compliance Preview Bullets */}
+              <div className="space-y-2 text-xs">
+                <div className="flex items-start gap-2 text-slate-600 dark:text-[#A5B0C8] leading-relaxed">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#2DD4BF] mt-1.5 shrink-0" />
+                  <span>Section 80C & 80D deduction headroom deployment cutoff</span>
+                </div>
+                <div className="flex items-start gap-2 text-slate-600 dark:text-[#A5B0C8] leading-relaxed">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#2DD4BF] mt-1.5 shrink-0" />
+                  <span>HRA rent receipts & landlord PAN mandatory payroll verification</span>
+                </div>
+                <div className="flex items-start gap-2 text-slate-600 dark:text-[#A5B0C8] leading-relaxed">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#2DD4BF] mt-1.5 shrink-0" />
+                  <span>Harvest up to ₹1.25 Lakh tax-free equity capital gains (Section 112A)</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-[#E7E2D7] dark:border-[#26304A] flex items-center justify-between text-xs font-bold text-[#0D9488] dark:text-[#2DD4BF]">
+              <span>Open Compliance Checklist</span>
+              <ArrowUpRight className="h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </div>
+          </motion.div>
         </section>
 
         {/* Step 5: The Silent Wealth Gap (Compounding Opportunity Cost) */}
@@ -481,43 +553,6 @@ export const Dashboard: React.FC = () => {
           <WealthCompoundingCard annualSavings={taxResult?.savings || 0} />
         </motion.section>
       </div>
-
-      {/* Option 3: Floating Bottom-Right Quick Action Dock (Clear of scrollbar) */}
-      <aside className="fixed bottom-6 right-6 z-40 flex items-center gap-1.5 p-1.5 rounded-2xl bg-white/95 dark:bg-[#131A2E]/95 backdrop-blur-md border border-[#E7E2D7] dark:border-[#26304A] shadow-2xl shadow-slate-900/15">
-        {/* Button 1: Tax Advisor */}
-        <motion.button
-          whileHover={{ y: -2 }}
-          whileTap={{ scale: 0.96 }}
-          onClick={() => openDrawer('advisor')}
-          className="group flex items-center gap-2 px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-[#1A233A] text-slate-800 dark:text-slate-100 transition-all text-xs font-bold cursor-pointer"
-          aria-label="Open Strategic Tax Advisor"
-        >
-          <div className="p-1 rounded-lg bg-[#8B5CF6]/15 text-[#7C3AED] dark:text-[#8B5CF6] group-hover:bg-[#8B5CF6] group-hover:text-white transition-colors">
-            <Lightbulb className="h-3.5 w-3.5" />
-          </div>
-          <span>Tax Advisor</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] animate-pulse" />
-        </motion.button>
-
-        <div className="h-4 w-px bg-[#E7E2D7] dark:bg-[#26304A]" />
-
-        {/* Button 2: March 31 Action Plan */}
-        <motion.button
-          whileHover={{ y: -2 }}
-          whileTap={{ scale: 0.96 }}
-          onClick={() => openDrawer('march31')}
-          className="group flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 transition-all text-xs font-bold shadow-xs cursor-pointer"
-          aria-label="Open March 31 Action Plan"
-        >
-          <div className="p-1 rounded-lg bg-white/10 dark:bg-slate-900/10 text-[#2DD4BF] dark:text-[#0D9488]">
-            <CalendarClock className="h-3.5 w-3.5" />
-          </div>
-          <span>March 31 Plan</span>
-          <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-rose-500/20 text-rose-300 dark:text-rose-600 border border-rose-500/30">
-            139d
-          </span>
-        </motion.button>
-      </aside>
 
       {/* Slide-Over Dedicated Tax Insights & Planning Drawer */}
       <TaxInsightsDrawer
