@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  transition: background-color 300ms ease, color 300ms ease;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Hide number spinner arrows across browsers */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Smooth input focus glow */
+input:focus, select:focus {
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.25);
+}
+
+* {
+  transition: background-color 300ms ease, border-color 300ms ease;
+}
