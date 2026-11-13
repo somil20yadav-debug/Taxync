@@ -482,40 +482,38 @@ export const Dashboard: React.FC = () => {
         </motion.section>
       </div>
 
-      {/* Floating Docked Side Tabs on Right Edge (No raw emojis, clean Lucide icons) */}
-      <aside className="fixed right-0 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-2.5 items-end">
-        {/* Tab 1: Tax Advisor */}
+      {/* Option 3: Floating Bottom-Right Quick Action Dock (Clear of scrollbar) */}
+      <aside className="fixed bottom-6 right-6 z-40 flex items-center gap-1.5 p-1.5 rounded-2xl bg-white/95 dark:bg-[#131A2E]/95 backdrop-blur-md border border-[#E7E2D7] dark:border-[#26304A] shadow-2xl shadow-slate-900/15">
+        {/* Button 1: Tax Advisor */}
         <motion.button
-          whileHover={{ x: -6 }}
+          whileHover={{ y: -2 }}
           whileTap={{ scale: 0.96 }}
           onClick={() => openDrawer('advisor')}
-          className="group flex items-center gap-2.5 pl-3.5 pr-2.5 py-2.5 rounded-l-2xl bg-white/95 dark:bg-[#131A2E]/95 backdrop-blur-md border-y border-l border-[#E7E2D7] dark:border-[#26304A] shadow-xl shadow-slate-900/10 hover:shadow-[#8B5CF6]/20 hover:border-[#8B5CF6]/40 transition-all text-slate-800 dark:text-slate-100 cursor-pointer"
+          className="group flex items-center gap-2 px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-[#1A233A] text-slate-800 dark:text-slate-100 transition-all text-xs font-bold cursor-pointer"
           aria-label="Open Strategic Tax Advisor"
         >
-          <div className="p-1.5 rounded-xl bg-[#8B5CF6]/15 text-[#7C3AED] dark:text-[#8B5CF6] group-hover:bg-[#8B5CF6] group-hover:text-white transition-colors">
-            <Lightbulb className="h-4 w-4" />
+          <div className="p-1 rounded-lg bg-[#8B5CF6]/15 text-[#7C3AED] dark:text-[#8B5CF6] group-hover:bg-[#8B5CF6] group-hover:text-white transition-colors">
+            <Lightbulb className="h-3.5 w-3.5" />
           </div>
-          <span className="hidden sm:inline text-xs font-bold tracking-tight">
-            Tax Advisor
-          </span>
-          <span className="w-2 h-2 rounded-full bg-[#8B5CF6] animate-pulse" />
+          <span>Tax Advisor</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] animate-pulse" />
         </motion.button>
 
-        {/* Tab 2: March 31 Action Plan */}
+        <div className="h-4 w-px bg-[#E7E2D7] dark:bg-[#26304A]" />
+
+        {/* Button 2: March 31 Action Plan */}
         <motion.button
-          whileHover={{ x: -6 }}
+          whileHover={{ y: -2 }}
           whileTap={{ scale: 0.96 }}
           onClick={() => openDrawer('march31')}
-          className="group flex items-center gap-2.5 pl-3.5 pr-2.5 py-2.5 rounded-l-2xl bg-white/95 dark:bg-[#131A2E]/95 backdrop-blur-md border-y border-l border-[#E7E2D7] dark:border-[#26304A] shadow-xl shadow-slate-900/10 hover:shadow-[#2DD4BF]/20 hover:border-[#2DD4BF]/40 transition-all text-slate-800 dark:text-slate-100 cursor-pointer"
+          className="group flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 transition-all text-xs font-bold shadow-xs cursor-pointer"
           aria-label="Open March 31 Action Plan"
         >
-          <div className="p-1.5 rounded-xl bg-[#2DD4BF]/15 text-[#0D9488] dark:text-[#2DD4BF] group-hover:bg-[#2DD4BF] group-hover:text-slate-900 transition-colors">
-            <CalendarClock className="h-4 w-4" />
+          <div className="p-1 rounded-lg bg-white/10 dark:bg-slate-900/10 text-[#2DD4BF] dark:text-[#0D9488]">
+            <CalendarClock className="h-3.5 w-3.5" />
           </div>
-          <span className="hidden sm:inline text-xs font-bold tracking-tight">
-            March 31 Plan
-          </span>
-          <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20">
+          <span>March 31 Plan</span>
+          <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-rose-500/20 text-rose-300 dark:text-rose-600 border border-rose-500/30">
             139d
           </span>
         </motion.button>

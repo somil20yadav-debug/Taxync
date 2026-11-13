@@ -9,12 +9,29 @@ def calculate_advanced_deductions(req: TaxCalculationRequest) -> float:
     ev_loan = min(req.evLoanInterest, 150000.0)
     return sec_80u + royalty + political + ev_loan
 
+def compute_surcharge(taxable_income: float, base_tax: float, is_new_regime: bool = True) -> float:
+    """Computes statutory income tax surcharge for HNIs (taxable income > ₹50L)."""
+    if taxable_income <= 5000000.0 or base_tax <= 0:
+        return 0.0
+
+    if taxable_income <= 10000000.0:
+        return base_tax * 0.10
+    elif taxable_income <= 20000000.0:
+        return base_tax * 0.15
+    elif taxable_income <= 50000000.0:
+        return base_tax * 0.25
+    else:
+        # > ₹5 Crore: New Regime capped at 25%, Old Regime 37%
+        rate = 0.25 if is_new_regime else 0.37
+        return base_tax * rate
+
 def calculate_old_regime_tax(income: float, total_deductions: float | dict = 0.0) -> float:
     """
     Old Regime Tax calculation:
     - Standard deduction: ₹50,000 for salaried individuals
     - Slabs: 0-2.5L: Nil, 2.5-5L: 5%, 5-10L: 20%, >10L: 30%
     - Section 87A rebate: If taxable income <= ₹5,00,000, tax liability is 0
+    - Surcharge: Applicable for taxable income > ₹50L
     - Health & Education Cess: 4%
     """
     ded_amount = sum(total_deductions.values()) if isinstance(total_deductions, dict) else float(total_deductions)
@@ -24,21 +41,26 @@ def calculate_old_regime_tax(income: float, total_deductions: float | dict = 0.0
         return 0.0
 
     slabs = [(1000000.0, 0.30), (500000.0, 0.20), (250000.0, 0.05)]
-    tax = 0.0
+    base_tax = 0.0
     rem = taxable
     for threshold, rate in slabs:
         if rem > threshold:
-            tax += (rem - threshold) * rate
+            base_tax += (rem - threshold) * rate
             rem = threshold
 
-    return float(round(tax * 1.04))
+    surcharge = compute_surcharge(taxable, base_tax, is_new_regime=False)
+    total_tax = base_tax + surcharge
+
+    return float(round(total_tax * 1.04))
 
 def calculate_new_regime_tax(income: float, standard_deduction: float = 75000.0) -> float:
     """
     New Regime Tax calculation (Budget FY 2025-26):
     - Standard deduction: ₹75,000
     - Slabs: 0-4L: Nil, 4-8L: 5%, 8-12L: 10%, 12-16L: 15%, 16-20L: 20%, 20-24L: 25%, >24L: 30%
-    - Sec 87A rebate: Tax free up to ₹12,00,000 taxable income (max rebate ₹60,000)
+    - Sec 87A rebate: Tax free up to ₹12,00,000 taxable income
+    - Section 87A Marginal Relief: If taxable income slightly exceeds ₹12L, tax cannot exceed (taxable - ₹12L)
+    - Surcharge: Applicable for taxable income > ₹50L
     - Health & Education Cess: 4%
     """
     taxable = max(0.0, income - standard_deduction)
@@ -53,14 +75,23 @@ def calculate_new_regime_tax(income: float, standard_deduction: float = 75000.0)
         (800000.0, 0.10),
         (400000.0, 0.05),
     ]
-    tax = 0.0
+    base_tax = 0.0
     rem = taxable
     for threshold, rate in slabs:
         if rem > threshold:
-            tax += (rem - threshold) * rate
+            base_tax += (rem - threshold) * rate
             rem = threshold
 
-    return float(round(tax * 1.04))
+    # Section 87A Marginal Relief:
+    # Tax on income exceeding rebate limit cannot exceed the excess income itself
+    excess_income = taxable - 1200000.0
+    if base_tax > excess_income:
+        base_tax = excess_income
+
+    surcharge = compute_surcharge(taxable, base_tax, is_new_regime=True)
+    total_tax = base_tax + surcharge
+
+    return float(round(total_tax * 1.04))
 
 def generate_suggestions(req: TaxCalculationRequest, deductions: Dict[str, float], is_new_winner: bool, savings: float) -> tuple[List[str], List[str]]:
     """Generates dynamic, highly personalized, mathematically precise tax advice."""
