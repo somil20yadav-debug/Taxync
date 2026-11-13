@@ -10,7 +10,10 @@ import {
   RotateCcw,
   Clock,
   Layers,
-  HelpCircle
+  HelpCircle,
+  Lightbulb,
+  Shield,
+  Rocket
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -347,23 +350,27 @@ export function Investments() {
                   {/* Asset Class Presets */}
                   <div className="flex flex-wrap gap-1.5 pt-1">
                     {[
-                      { label: '🛡️ 7% (PPF / FD)', rate: 7 },
-                      { label: '📈 12% (Nifty 50 Index)', rate: 12 },
-                      { label: '🚀 15% (Active Flexicap)', rate: 15 },
-                    ].map((p) => (
-                      <button
-                        key={p.rate}
-                        type="button"
-                        onClick={() => setReturnRate(p.rate)}
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
-                          returnRate === p.rate
-                            ? 'bg-[#2DD4BF]/20 text-[#0D9488] dark:text-[#2DD4BF] border border-[#2DD4BF]/40'
-                            : 'bg-slate-100 dark:bg-[#0B1020] text-slate-500'
-                        }`}
-                      >
-                        {p.label}
-                      </button>
-                    ))}
+                      { label: '7% (PPF / FD)', rate: 7, icon: Shield },
+                      { label: '12% (Nifty 50)', rate: 12, icon: TrendingUp },
+                      { label: '15% (Active Equity)', rate: 15, icon: Rocket },
+                    ].map((p) => {
+                      const IconComp = p.icon;
+                      return (
+                        <button
+                          key={p.rate}
+                          type="button"
+                          onClick={() => setReturnRate(p.rate)}
+                          className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all flex items-center gap-1 ${
+                            returnRate === p.rate
+                              ? 'bg-[#2DD4BF]/20 text-[#0D9488] dark:text-[#2DD4BF] border border-[#2DD4BF]/40'
+                              : 'bg-slate-100 dark:bg-[#0B1020] text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                          }`}
+                        >
+                          <IconComp className="h-3 w-3" />
+                          <span>{p.label}</span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -409,7 +416,10 @@ export function Investments() {
 
                 {/* Capital Gains Tax Tip */}
                 <div className="pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
-                  <span>💡 ₹1.25 Lakh/year is tax-free under Sec 112A</span>
+                  <span className="flex items-center gap-1.5">
+                    <Lightbulb className="h-3.5 w-3.5 text-[#2DD4BF] shrink-0" />
+                    <span>₹1.25 Lakh/year is tax-free under Sec 112A</span>
+                  </span>
                   <Link to="/library" className="text-[#8B5CF6] hover:underline font-bold">
                     View Rules →
                   </Link>

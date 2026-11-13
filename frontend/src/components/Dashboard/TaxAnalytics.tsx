@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BarChart3, PieChart as PieIcon, LineChart as LineIcon, CheckCircle } from 'lucide-react';
+import { BarChart3, PieChart as PieIcon, LineChart as LineIcon, CheckCircle, Lightbulb } from 'lucide-react';
 import { TaxResult, TaxFormData } from '../../api';
 
 interface TaxAnalyticsProps {
@@ -338,8 +338,9 @@ export const TaxAnalytics: React.FC<TaxAnalyticsProps> = ({ taxResult, formData 
           </div>
 
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#0B1020] border border-[#E7E2D7] dark:border-[#26304A] flex items-center justify-between text-[11px]">
-            <span className="text-slate-600 dark:text-[#A5B0C8]">
-              💡 <strong>Key Takeaway:</strong> Under the Finance Act 2025, New Regime stays at <strong>₹0 tax</strong> all the way up to ₹12 Lakhs. Old regime only matches if deductions exceed ₹4.25 Lakhs.
+            <span className="text-slate-600 dark:text-[#A5B0C8] flex items-center gap-1.5 flex-wrap">
+              <Lightbulb className="h-3.5 w-3.5 text-[#8B5CF6] shrink-0" />
+              <span><strong>Key Takeaway:</strong> Under the Finance Act 2025, New Regime stays at <strong>₹0 tax</strong> all the way up to ₹12 Lakhs. Old regime only matches if deductions exceed ₹4.25 Lakhs.</span>
             </span>
           </div>
         </div>

@@ -14,7 +14,8 @@ import {
   Heart,
   GraduationCap,
   Zap,
-  HelpCircle
+  HelpCircle,
+  Lightbulb
 } from 'lucide-react';
 
 interface TaxLawItem {
@@ -432,8 +433,9 @@ export function Library() {
                         className="overflow-hidden mt-2"
                       >
                         <div className="p-3.5 rounded-xl bg-[#2DD4BF]/5 border border-[#2DD4BF]/25 text-xs text-slate-800 dark:text-slate-200 space-y-1">
-                          <span className="text-[10px] uppercase font-bold text-[#0D9488] dark:text-[#2DD4BF] block tracking-wider">
-                            💡 Real-World Numerical Example
+                          <span className="text-[10px] uppercase font-bold text-[#0D9488] dark:text-[#2DD4BF] flex items-center gap-1.5 tracking-wider">
+                            <Lightbulb className="h-3 w-3" />
+                            <span>Real-World Numerical Example</span>
                           </span>
                           <p className="text-[11px] leading-relaxed">
                             {item.realWorldExample}

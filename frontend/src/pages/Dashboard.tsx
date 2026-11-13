@@ -10,6 +10,7 @@ import { TaxSimulator } from '../components/Dashboard/TaxSimulator';
 import { PayslipScannerDrawer } from '../components/Dashboard/PayslipScannerDrawer';
 import { WealthCompoundingCard } from '../components/Dashboard/WealthCompoundingCard';
 import { March31ActionPlan } from '../components/Dashboard/March31ActionPlan';
+import { TaxInsightsDrawer } from '../components/Dashboard/TaxInsightsDrawer';
 import { 
   Sun, 
   Moon, 
@@ -17,9 +18,12 @@ import {
   Sparkles, 
   Check, 
   Download, 
-  Wallet,
-  ArrowUp,
-  FileText
+  Wallet, 
+  ArrowUp, 
+  FileText,
+  Lightbulb,
+  CalendarClock,
+  ArrowUpRight
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -87,7 +91,13 @@ export const Dashboard: React.FC = () => {
   const [showFloatingHUD, setShowFloatingHUD] = useState(false);
   const [isExportingPDF, setIsExportingPDF] = useState(false);
   const [isScannerOpen, setIsScannerOpen] = useState(false);
-  const [activeInsightTab, setActiveInsightTab] = useState<'advisor' | 'march31'>('advisor');
+  const [isInsightsDrawerOpen, setIsInsightsDrawerOpen] = useState(false);
+  const [insightsTab, setInsightsTab] = useState<'advisor' | 'march31'>('advisor');
+
+  const openInsights = (tab: 'advisor' | 'march31') => {
+    setInsightsTab(tab);
+    setIsInsightsDrawerOpen(true);
+  };
 
   const scenarioDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -426,67 +436,41 @@ export const Dashboard: React.FC = () => {
           <TaxAnalytics taxResult={taxResult} formData={formData} />
         </motion.section>
 
-        {/* Step 4: Compact Action & Insights Hub (Tabbed to prevent excessive vertical scrolling) */}
-        <section className="space-y-4">
-          <div className="flex items-center justify-between pb-1 flex-wrap gap-2">
-            <div className="flex items-center gap-1.5 p-1 bg-white/70 dark:bg-[#131A2E]/70 rounded-2xl border border-[#E7E2D7] dark:border-[#26304A] text-xs font-bold">
-              <button
-                type="button"
-                onClick={() => setActiveInsightTab('advisor')}
-                className={`px-3.5 py-1.5 rounded-xl transition-all ${
-                  activeInsightTab === 'advisor'
-                    ? 'bg-[#8B5CF6] text-white shadow-sm'
-                    : 'text-slate-600 dark:text-[#A5B0C8] hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                💡 Strategic Tax Advisor
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveInsightTab('march31')}
-                className={`px-3.5 py-1.5 rounded-xl transition-all ${
-                  activeInsightTab === 'march31'
-                    ? 'bg-[#8B5CF6] text-white shadow-sm'
-                    : 'text-slate-600 dark:text-[#A5B0C8] hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                ⚡ March 31 Action Plan
-              </button>
+        {/* Step 4: Strategic Optimization & Deadlines (Compact Inline Launch Hub) */}
+        <section className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#8B5CF6]/10 via-[#2DD4BF]/10 to-transparent border border-[#E7E2D7] dark:border-[#26304A] flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs transition-colors">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-white dark:bg-[#131A2E] border border-[#E7E2D7] dark:border-[#26304A] text-[#7C3AED] dark:text-[#8B5CF6] shadow-xs">
+              <Sparkles className="h-5 w-5" />
             </div>
-            <span className="text-[11px] text-slate-400 font-medium hidden sm:inline">
-              Planning & Optimization Roadmap
-            </span>
+            <div>
+              <h3 className="text-xs font-black uppercase text-slate-900 dark:text-white tracking-wider flex items-center gap-2">
+                <span>Personalized Planning & Statutory Deadlines</span>
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-[#A5B0C8] mt-0.5">
+                Explore calculated Corporate NPS restructuring and your March 31 statutory deduction checklist.
+              </p>
+            </div>
           </div>
 
-          <AnimatePresence mode="wait">
-            {activeInsightTab === 'advisor' && (
-              <motion.div
-                key="advisor"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-              >
-                <TaxAdvisor taxResult={taxResult} />
-              </motion.div>
-            )}
-
-            {activeInsightTab === 'march31' && (
-              <motion.div
-                key="march31"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-              >
-                <March31ActionPlan 
-                  formData={formData} 
-                  taxResult={taxResult} 
-                  onUpdateField={(field, val) => handleFormChange(field, val)} 
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <div className="flex items-center gap-2.5 shrink-0">
+            <button
+              onClick={() => openInsights('advisor')}
+              className="px-4 py-2.5 rounded-xl bg-white dark:bg-[#131A2E] hover:border-[#8B5CF6] border border-[#E7E2D7] dark:border-[#26304A] text-xs font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 transition-all shadow-xs active:scale-95 group"
+            >
+              <Lightbulb className="h-4 w-4 text-[#7C3AED] dark:text-[#8B5CF6] group-hover:scale-110 transition-transform" />
+              <span>Tax Advisor</span>
+            </button>
+            <button
+              onClick={() => openInsights('march31')}
+              className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-xs font-bold text-white dark:text-slate-900 flex items-center gap-2 transition-all shadow-sm active:scale-95 group"
+            >
+              <CalendarClock className="h-4 w-4 text-[#2DD4BF] group-hover:scale-110 transition-transform" />
+              <span>March 31 Plan</span>
+              <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-rose-500/20 text-rose-300 dark:text-rose-600 border border-rose-500/30">
+                139d
+              </span>
+            </button>
+          </div>
         </section>
 
         {/* Step 5: The Silent Wealth Gap (Compounding Opportunity Cost) */}
@@ -499,6 +483,56 @@ export const Dashboard: React.FC = () => {
           <WealthCompoundingCard annualSavings={taxResult?.savings || 0} />
         </motion.section>
       </div>
+
+      {/* Floating Docked Side Tabs on Right Edge (No raw emojis, clean Lucide icons) */}
+      <aside className="fixed right-0 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-2.5 items-end">
+        {/* Tab 1: Tax Advisor */}
+        <motion.button
+          whileHover={{ x: -6 }}
+          whileTap={{ scale: 0.96 }}
+          onClick={() => openInsights('advisor')}
+          className="group flex items-center gap-2.5 pl-3.5 pr-2.5 py-2.5 rounded-l-2xl bg-white/95 dark:bg-[#131A2E]/95 backdrop-blur-md border-y border-l border-[#E7E2D7] dark:border-[#26304A] shadow-xl shadow-slate-900/10 hover:shadow-[#8B5CF6]/20 hover:border-[#8B5CF6]/40 transition-all text-slate-800 dark:text-slate-100 cursor-pointer"
+          aria-label="Open Strategic Tax Advisor"
+        >
+          <div className="p-1.5 rounded-xl bg-[#8B5CF6]/15 text-[#7C3AED] dark:text-[#8B5CF6] group-hover:bg-[#8B5CF6] group-hover:text-white transition-colors">
+            <Lightbulb className="h-4 w-4" />
+          </div>
+          <span className="hidden sm:inline text-xs font-bold tracking-tight">
+            Tax Advisor
+          </span>
+          <span className="w-2 h-2 rounded-full bg-[#8B5CF6] animate-pulse" />
+        </motion.button>
+
+        {/* Tab 2: March 31 Action Plan */}
+        <motion.button
+          whileHover={{ x: -6 }}
+          whileTap={{ scale: 0.96 }}
+          onClick={() => openInsights('march31')}
+          className="group flex items-center gap-2.5 pl-3.5 pr-2.5 py-2.5 rounded-l-2xl bg-white/95 dark:bg-[#131A2E]/95 backdrop-blur-md border-y border-l border-[#E7E2D7] dark:border-[#26304A] shadow-xl shadow-slate-900/10 hover:shadow-[#2DD4BF]/20 hover:border-[#2DD4BF]/40 transition-all text-slate-800 dark:text-slate-100 cursor-pointer"
+          aria-label="Open March 31 Action Plan"
+        >
+          <div className="p-1.5 rounded-xl bg-[#2DD4BF]/15 text-[#0D9488] dark:text-[#2DD4BF] group-hover:bg-[#2DD4BF] group-hover:text-slate-900 transition-colors">
+            <CalendarClock className="h-4 w-4" />
+          </div>
+          <span className="hidden sm:inline text-xs font-bold tracking-tight">
+            March 31 Plan
+          </span>
+          <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20">
+            139d
+          </span>
+        </motion.button>
+      </aside>
+
+      {/* Slide-Over Tax Insights & Planning Drawer */}
+      <TaxInsightsDrawer
+        isOpen={isInsightsDrawerOpen}
+        onClose={() => setIsInsightsDrawerOpen(false)}
+        activeTab={insightsTab}
+        onTabChange={(tab) => setInsightsTab(tab)}
+        formData={formData}
+        taxResult={taxResult}
+        onUpdateField={(field, val) => handleFormChange(field, val)}
+      />
 
       {/* Slide-Over Payslip Scanner Drawer */}
       <PayslipScannerDrawer
